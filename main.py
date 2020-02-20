@@ -3,8 +3,9 @@ class Book:
         self.id = id
         self.score = score
 
+
 class Lib:
-    def __init__(self, id, books, signup_time, score, used_books, books_per_day):
+    def __init__(self, id, books, signup_time, books_per_day, score=0, used_books=0):
         self.id = id
         self.books = books
         self.signup_time = signup_time
@@ -52,6 +53,19 @@ def solver(problem):
         # increment day
         day += 1
 
+def convert_to_objects(data):
+    problem = Problem(data[0][2], data[0][1])
+    all_books = {}
+    libs = {}
+    for i, score in enumerate(data[1]):
+        all_books[i] = Book(id=i, score=score)
+    for i in range(2, len(data), 2):
+        libs[(i - 2) / 2] = Lib(id=(i - 2) / 2, books={}, signup_time=data[i][1], books_per_day=data[i][2])
+        for j in range(0, len(data[i + 1])):
+            libs[(i - 2) / 2].books[data[i + 1][j]] = all_books[data[i + 1][j]]
+    return libs
+
+
 def read_input(filepath,
                n_lines=None):
     with open(filepath) as fp:
@@ -77,3 +91,4 @@ def write_output(data, filepath):
 
 if __name__ == "__main__":
     data = read_input('a_example.txt')
+    swag = convert_to_objects(data)
