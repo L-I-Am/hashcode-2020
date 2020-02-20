@@ -53,7 +53,7 @@ def solver(problem):
         day += 1
 
         # if init day is reached, move lib from pending to inited_libs
-        if day >= init_day and problem.pending != None:
+        if day >= init_day and problem.pending != None and day < problem.days:
             problem.inited_libs.append(problem.pending)
             problem.pending = None
 
@@ -87,18 +87,22 @@ def read_input(filepath,
 def write_output(problem, filepath):
     with open(filepath, 'w') as fp:
         fp.write("{}\n".format(str(len(problem.inited_libs))))
+        index = 0
         for library in problem.inited_libs:
-            fp.write("{} {}\n".format(int(library.id), len(library.books)))
-            for book in library.books:
+            fp.write("{} {}\n".format(int(library.id), len(library.used_books)))
+            for book in library.used_books:
                 fp.write("{} ".format(book))
-            fp.write("\n")
+            if index < len(problem.inited_libs) - 1:
+                fp.write("\n")
+            index += 1
 
+files = ['a_example.txt', 'b_read_on.txt', 'c_incunabula.txt', 'd_tough_choices.txt', 'e_so_many_books.txt', 'f_libraries_of_the_world.txt']
 
 if __name__ == "__main__":
-    filepath = 'a_example.txt'
-    data = read_input(filepath)
-    swag = convert_to_objects(data)
-    solver(swag)
-    write_output(swag, "{}_solved.txt".format(filepath[0]))
+    for fileIndex in range(0, len(files)):
+        data = read_input(files[fileIndex])
+        swag = convert_to_objects(data)
+        solver(swag)
+        write_output(swag, "{}_solved.txt".format(files[fileIndex][0]))
 
 
