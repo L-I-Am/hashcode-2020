@@ -1,7 +1,9 @@
 class Book:
-    def __init__(self, id, score):
+    def __init__(self, id, score, used_books, books_per_day):
         self.id = id
         self.score = score
+        self.used_books = used_books
+        self.books_per_day = books_per_day
 
 
 class Lib:
@@ -26,7 +28,10 @@ def read_input(filepath,
                n_lines=None):
     with open(filepath) as fp:
         lines = fp.readlines()
-    lines = [x.strip() for x in lines]
+    lines = [x.split() for x in lines]
+    for line in lines:
+        for i in range(0, len(line)):
+            line[i] = int(line[i])
     if n_lines:
         return lines[:n_lines]
     else:
@@ -43,4 +48,4 @@ def write_output(data, filepath):
 
 
 if __name__ == "__main__":
-    data = read_input('b_example.txt')
+    data = read_input('a_example.txt')
