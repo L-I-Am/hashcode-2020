@@ -3,7 +3,6 @@ class Book:
         self.id = id
         self.score = score
 
-
 class Lib:
     def __init__(self, id, books, signup_time, books_per_day, score=0, used_books=0):
         self.id = id
@@ -25,7 +24,7 @@ def solver(problem):
     day = 0
     while(day < problem.days):
 
-        # sort libs by score (equal not yet done, do later)
+        # sort libs by signup_day (equal not yet done, do later)
         problem.uninited_libs = {k: v for k, v in sorted(problem.uninited_libs.items(), key = lambda item: item[1].signup_time)}
         problem.sort(key = lambda x: x.signup_time)
 
@@ -34,10 +33,12 @@ def solver(problem):
             if len(problem.uninited_libs) > 0:
                 problem.pending = problem.uninited_libs[0]
                 init_day = problem.pending.signup_time + day
+                del problem.uninited_libs[problem.pending.id]
 
         # do book reading here
-        for lib in problem.inited_libs:
+        for lib in problem.inited_libs.items():
             # fix this check with extra list, saves comp time
+            # ^ don't do this, makes output parsing harder
             if len(lib.books) > 0: 
                 # note: assumes books in the lib are sorted by score, highest first!!
                 read_books = lib.books[:min(lib.books_per_day, len(lib.books))]
