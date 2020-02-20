@@ -84,13 +84,14 @@ def read_input(filepath,
         return lines
 
 
-def write_output(data, filepath):
+def write_output(problem, filepath):
     with open(filepath, 'w') as fp:
-        for line in data:
-            for number in line:
-                fp.write(str(number))
-                fp.write(' ')
-            fp.write('\n')
+        fp.write("{}\n".format(str(len(problem.inited_libs))))
+        for library in problem.inited_libs:
+            fp.write("{} {}\n".format(library.id, len(library.books)))
+            for book in sorted(library.books.keys()):
+                fp.write("{} ".format(book))
+            fp.write("\n")
 
 
 if __name__ == "__main__":
