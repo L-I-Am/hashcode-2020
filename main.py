@@ -4,7 +4,7 @@ class Book:
         self.score = score
 
 class Lib:
-    def __init__(self, id, books, signup_time, books_per_day, score=0, used_books=0):
+    def __init__(self, id, books, signup_time, books_per_day = 0, score=0, used_books=[]):
         self.id = id
         self.books = books
         self.signup_time = signup_time
@@ -22,28 +22,28 @@ class Problem:
 
 def solver(problem):
     day = 0
-    while(day < problem.days):
+    
+    # sort libs by signup_day (equal not yet done, do later)
+    problem.uninited_libs = {k: v for k, v in sorted(problem.uninited_libs.items(), key = lambda item: item[1].signup_time)}
 
-        # sort libs by signup_day (equal not yet done, do later)
-        problem.uninited_libs = {k: v for k, v in sorted(problem.uninited_libs.items(), key = lambda item: item[1].signup_time)}
-        problem.sort(key = lambda x: x.signup_time)
+    while(day < problem.days):
 
         # start init of one lib
         if problem.pending == None:
             if len(problem.uninited_libs) > 0:
-                problem.pending = problem.uninited_libs[0]
+                problem.pending = problem.uninited_libs[(list(problem.uninited_libs.keys()))[0]]
                 init_day = problem.pending.signup_time + day
                 del problem.uninited_libs[problem.pending.id]
 
         # do book reading here
-        for lib in problem.inited_libs.items():
+        for lib in problem.inited_libs:
             # fix this check with extra list, saves comp time
             # ^ don't do this, makes output parsing harder
             if len(lib.books) > 0: 
                 # note: assumes books in the lib are sorted by score, highest first!!
-                read_books = lib.books[:min(lib.books_per_day, len(lib.books))]
+                read_books = list(lib.books)[:min(lib.books_per_day, len(lib.books))]
                 # remove read_books from books
-                lib.books = lib[min(3, len(lib.books)):]
+                lib.books = list(lib.books)[min(3, len(lib.books)):]
                 lib.used_books = lib.used_books + read_books
 
         # all read books must be removed from all libs, and recalc)
@@ -58,7 +58,6 @@ def solver(problem):
         day += 1
 
 def convert_to_objects(data):
-    problem = Problem(data[0][2], data[0][1])
     all_books = {}
     libs = {}
     for i, score in enumerate(data[1]):
@@ -67,7 +66,8 @@ def convert_to_objects(data):
         libs[(i - 2) / 2] = Lib(id=(i - 2) / 2, books={}, signup_time=data[i][1], books_per_day=data[i][2])
         for j in range(0, len(data[i + 1])):
             libs[(i - 2) / 2].books[data[i + 1][j]] = all_books[data[i + 1][j]]
-    return libs
+    problem = Problem(data[0][2], libs)
+    return problem
 
 
 def read_input(filepath,
@@ -96,3 +96,5 @@ def write_output(data, filepath):
 if __name__ == "__main__":
     data = read_input('a_example.txt')
     swag = convert_to_objects(data)
+    solver(swag)
+
