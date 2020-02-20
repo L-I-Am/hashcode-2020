@@ -26,7 +26,7 @@ def solver(problem):
     # sort libs by signup_day (equal not yet done, do later)
     problem.uninited_libs = {k: v for k, v in sorted(problem.uninited_libs.items(), key = lambda item: item[1].signup_time)}
 
-    while(day < problem.days):
+    while(day <= problem.days):
 
         # start init of one lib
         if problem.pending == None:
@@ -48,14 +48,14 @@ def solver(problem):
 
         # all read books must be removed from all libs, and recalc)
         # skip for now
-            
-        # if init day is reached, move lib from pending to inited_libs
-        if day == init_day:
-            problem.inited_libs.append(problem.pending)
-            problem.pending = None
         
         # increment day
         day += 1
+
+        # if init day is reached, move lib from pending to inited_libs
+        if day >= init_day and problem.pending != None:
+            problem.inited_libs.append(problem.pending)
+            problem.pending = None
 
 def convert_to_objects(data):
     all_books = {}
