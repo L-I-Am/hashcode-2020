@@ -88,17 +88,17 @@ def write_output(problem, filepath):
     with open(filepath, 'w') as fp:
         fp.write("{}\n".format(str(len(problem.inited_libs))))
         for library in problem.inited_libs:
-            fp.write("{} {}\n".format(library.id, len(library.books)))
-            for book in sorted(library.books.keys()):
+            fp.write("{} {}\n".format(int(library.id), len(library.books)))
+            for book in library.books:
                 fp.write("{} ".format(book))
             fp.write("\n")
 
 
 if __name__ == "__main__":
     filepath = 'a_example.txt'
-    data = read_input('a_example.txt')
+    data = read_input(filepath)
     swag = convert_to_objects(data)
     solver(swag)
-    write_output(swag, "{}_solved".format(filepath[0]))
+    write_output(swag, "{}_solved.txt".format(filepath[0]))
 
 
