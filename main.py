@@ -43,7 +43,7 @@ def solver(problem):
                 # note: assumes books in the lib are sorted by score, highest first!!
                 read_books = list(lib.books)[:min(lib.books_per_day, len(lib.books))]
                 # remove read_books from books
-                lib.books = list(lib.books)[min(3, len(lib.books)):]
+                lib.books = list(lib.books)[min(lib.books_per_day, len(lib.books)):]
                 lib.used_books = lib.used_books + read_books
 
         # all read books must be removed from all libs, and recalc)
