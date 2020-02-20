@@ -43,4 +43,4 @@ def write_output(data, filepath):
 
 
 if __name__ == "__main__":
-    data = read_input('a_example.txt')
+    data = read_input('b_example.txt')
