@@ -26,7 +26,8 @@ def solver(problem):
     while(day < problem.days):
 
         # sort libs by score (equal not yet done, do later)
-        problem.uninited_libs = problem.sort(key = lambda x: x.signup_time)
+        problem.uninited_libs = {k: v for k, v in sorted(problem.uninited_libs.items(), key = lambda item: item[1].signup_time)}
+        problem.sort(key = lambda x: x.signup_time)
 
         # start init of one lib
         if problem.pending == None:
