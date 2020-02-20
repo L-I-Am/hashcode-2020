@@ -31,15 +31,17 @@ def solver(problem):
         if problem.pending == None:
             if len(problem.uninited_libs) > 0:
                 problem.pending = problem.uninited_libs[0]
-                init_day = problem.pending.signup_time
+                init_day = problem.pending.signup_time + day
 
         # do book reading here
         for lib in problem.inited_libs:
-            # note: assumes books in the lib are sorted by score, highest first!!
-            read_books = lib.books[:min(lib.books_per_day, len(lib.books))]
-            # remove read_books from books
-            lib.books = lib[min(3, len(lib.books):]
-            lib.used_books = lib.used_books + read_books
+            # fix this check with extra list, saves comp time
+            if len(lib.books) > 0: 
+                # note: assumes books in the lib are sorted by score, highest first!!
+                read_books = lib.books[:min(lib.books_per_day, len(lib.books))]
+                # remove read_books from books
+                lib.books = lib[min(3, len(lib.books)):]
+                lib.used_books = lib.used_books + read_books
 
         # all read books must be removed from all libs, and recalc)
         # skip for now
