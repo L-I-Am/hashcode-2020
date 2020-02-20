@@ -67,6 +67,11 @@ def convert_to_objects(data):
         for j in range(0, len(data[i + 1])):
             libs[(i - 2) / 2].books[data[i + 1][j]] = all_books[data[i + 1][j]]
     problem = Problem(data[0][2], libs)
+
+    for k, lib in problem.uninited_libs.items():
+        new_dict = {k: v for k, v in sorted(lib.books.items(), key=lambda item: item[1].score, reverse=True)}
+        lib.books = new_dict
+
     return problem
 
 
