@@ -101,3 +101,4 @@ if __name__ == "__main__":
     solver(swag)
     write_output(swag, "{}_solved".format(filepath[0]))
 
+
