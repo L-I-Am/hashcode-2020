@@ -1,3 +1,5 @@
+import argparse
+
 class Book:
     def __init__(self, id, score):
         self.id = id
@@ -110,8 +112,10 @@ def write_output(problem, filepath):
 files = ['a_example.txt', 'b_read_on.txt', 'c_incunabula.txt', 'd_tough_choices.txt', 'e_so_many_books.txt', 'f_libraries_of_the_world.txt']
 
 if __name__ == "__main__":
-    # for fileIndex in range(5, len(files)):
-    fileIndex = 2
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i','--index', type=int, default=0)
+    config = parser.parse_args()
+    fileIndex = config.index
     data = read_input(files[fileIndex])
     swag = convert_to_objects(data)
     solver(swag)
