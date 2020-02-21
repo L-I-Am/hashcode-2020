@@ -1,3 +1,5 @@
+import argparse
+
 class Book:
     def __init__(self, id, score):
         self.id = id
@@ -18,6 +20,7 @@ class Problem:
         self.inited_libs = []
         self.pending = None
         self.uninited_libs = libs
+        self.globally_read_books = []
 
 
 def solver(problem):
@@ -25,6 +28,9 @@ def solver(problem):
     
     # sort libs by signup_day (equal not yet done, do later)
     problem.uninited_libs = {k: v for k, v in sorted(problem.uninited_libs.items(), key = lambda item: item[1].signup_time)}
+
+    # sort libs on the lib score, it assumes 
+
 
     while(day <= problem.days):
 
@@ -42,12 +48,19 @@ def solver(problem):
             if len(lib.books) > 0: 
                 # note: assumes books in the lib are sorted by score, highest first!!
                 read_books = list(lib.books)[:min(lib.books_per_day, len(lib.books))]
+                problem.globally_read_books = list(set(problem.globally_read_books + read_books))
                 # remove read_books from books
                 lib.books = list(lib.books)[min(lib.books_per_day, len(lib.books)):]
                 lib.used_books = lib.used_books + read_books
 
         # all read books must be removed from all libs, and recalc)
-        # skip for now
+        for lib in problem.inited_libs:
+            lib.books = [x for x in lib.books if x not in problem.globally_read_books]
+
+        for k, lib in problem.uninited_libs.items():
+            lib.books = [x for x in lib.books if x not in problem.globally_read_books]
+        
+        #problem.pending.books = [x for k, x in problem.pending.books.items() if x not in problem.globally_read_books]
         
         # increment day
         day += 1
@@ -104,10 +117,13 @@ def write_output(problem, filepath):
 files = ['a_example.txt', 'b_read_on.txt', 'c_incunabula.txt', 'd_tough_choices.txt', 'e_so_many_books.txt', 'f_libraries_of_the_world.txt']
 
 if __name__ == "__main__":
-    for fileIndex in range(0, len(files)):
-        data = read_input(files[fileIndex])
-        swag = convert_to_objects(data)
-        solver(swag)
-        write_output(swag, "{}_solved.txt".format(files[fileIndex][0]))
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i','--index', type=int, default=0)
+    config = parser.parse_args()
+    fileIndex = config.index
+    data = read_input(files[fileIndex])
+    swag = convert_to_objects(data)
+    solver(swag)
+    write_output(swag, "{}_solved.txt".format(files[fileIndex][0]))
 
 
